@@ -10,6 +10,8 @@ use solarized::{
 };
 use qrcode_generator::QrCodeEcc;
 
+const MAX_TEXT_SIZE: usize = 2048;
+
 fn png(url: &str, filename: &str) {
     print_colored(
         &["c", "r", "e", "a", "t", "i", "n", "g"],
@@ -24,6 +26,18 @@ fn svg(url: &str, filename: &str) {
         &[VIOLET, BLUE, CYAN, GREEN, YELLOW, ORANGE, RED, MAGENTA]
     );
     qrcode_generator::to_svg_to_file(url, QrCodeEcc::Low, 1024, None::<&str>, filename).unwrap();
+}
+
+fn read_file_to_string(filename: &str) -> io::Result<String> {
+    let mut file = std::fs::File::open(filename)?;
+    let mut contents = String::new();
+    file.read_to_string(&mut contents)?;
+    Ok(contents)
+    //2K cap
+}
+
+fn is_file_path(path: &str) -> bool {
+    Path::new(path).is_file()
 }
 
 fn usage(args: Vec<String>) {
@@ -48,32 +62,46 @@ fn usage(args: Vec<String>) {
 
 fn main() {
     let args: Vec<String> = env::args().collect();
-    let (url, filename) = if args.len() == 1 {
+    let (text, filename) = if args.len() == 1 {
         let mut buffer = String::new();
         io::stdin().read_to_string(&mut buffer).unwrap();
-        let parts: Vec<&str> = buffer.trim().split_whitespace().collect();
-        if parts.len() == 1 {
-            (parts[0].to_string(), "file_output.png".to_string())
-        } else if parts.len() >= 2 {
-            (parts[0].to_string(), parts[1].to_string())
-        } else {
-            usage(args);
-            return;
-        }
+        (buffer.trim().to_string(), "file_output.png".to_string())
     } else if args.len() == 2 {
-        (args[1].clone(), "file_output.png".to_string())
+        let mut buffer = String::new();
+        io::stdin().read_to_string(&mut buffer).unwrap();
+        (buffer.trim().to_string(), args[1].clone())
     } else if args.len() == 3 {
-        (args[1].clone(), args[2].clone())
+        if is_file_path(&args[1]) {
+            let file_content = read_file_to_string(&args[1]);
+            match file_content {
+                Ok(content) => (content.trim().to_string(), args[2].clone()),
+                Err(_) => {
+                    usage(args);
+                    return;
+                }
+            }
+        } else {
+            (args[1].clone(), args[2].clone())
+        }
     } else {
         usage(args);
         return;
     };
+    if text.len() > MAX_TEXT_SIZE {
+        let chunks = text.as_bytes().chunks(MAX_TEXT_SIZE);
+        for (i, chunk) in chunks.enumerate() {
+            let chunk_str = String::from_utf8_lossy(chunk);
+            let filename_with_index = format!("{}_part_{}.png", filename, i);
+            png(&chunk_str, &filename_with_index);
+        }
+        return;
+    }
     let extension = Path::new(&filename).extension()
         .and_then(|s| s.to_str())
         .unwrap_or("");
     match extension {
-        "png" => png(&url, &filename),
-        "svg" => svg(&url, &filename),
+        "png" => png(&text, &filename),
+        "svg" => svg(&text, &filename),
         _ => {
             let mut new_filename = PathBuf::from(filename);
             new_filename.set_extension("png");
@@ -86,7 +114,7 @@ fn main() {
                 (". Saving as ", CYAN, vec![]),
                 (new_filename_str, BLUE, vec![BOLD]),
             ]);
-            png(&url, new_filename_str)
+            png(&text, new_filename_str)
         },
     }
 }
