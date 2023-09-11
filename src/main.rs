@@ -38,13 +38,12 @@ fn main() {
         usage(args);
         return;
     };
-    println!("text: {}", text);
     if text.len() > MAX_TEXT_SIZE {
         let chunks = text.as_bytes().chunks(MAX_TEXT_SIZE);
         for (i, chunk) in chunks.enumerate() {
             let chunk_str = String::from_utf8_lossy(chunk);
             let filename_with_index = format!("{}_part_{}.png", filename, i);
-            png(&chunk_str, &filename_with_index);
+            png(&chunk_str, &filename_with_index, &text);
         }
         return;
     }
@@ -52,14 +51,14 @@ fn main() {
         .and_then(|s| s.to_str())
         .unwrap_or("");
     match extension {
-        "png" => png(&text, &filename),
-        "svg" => svg(&text, &filename),
+        "png" => png(&text, &filename, &text),
+        "svg" => svg(&text, &filename, &text),
         _ => {
             let mut new_filename = PathBuf::from(filename);
             new_filename.set_extension("png");
             let new_filename_str = new_filename.to_str().unwrap_or("output.png");
             unsupported(new_filename_str);
-            png(&text, new_filename_str)
+            png(&text, new_filename_str, &text)
         },
     }
 }

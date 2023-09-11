@@ -8,7 +8,8 @@ use crate::solarized::{
 };
 use qrcode_generator::QrCodeEcc;
 
-pub fn png(url: &str, filename: &str) {
+pub fn png(url: &str, filename: &str, text: &str) {
+    println!("text: {}", text);
     print_colored(
         &["c", "r", "e", "a", "t", "i", "n", "g"],
         &[VIOLET, BLUE, CYAN, GREEN, YELLOW, ORANGE, RED, MAGENTA]
@@ -16,7 +17,8 @@ pub fn png(url: &str, filename: &str) {
     qrcode_generator::to_png_to_file(url, QrCodeEcc::Low, 1024, filename).unwrap();
 }
 
-pub fn svg(url: &str, filename: &str) {
+pub fn svg(url: &str, filename: &str, text: &str) {
+    println!("text: {}", text);
     print_colored(
         &["c", "r", "e", "a", "t", "i", "n", "g"],
         &[VIOLET, BLUE, CYAN, GREEN, YELLOW, ORANGE, RED, MAGENTA]
@@ -38,7 +40,9 @@ pub fn is_file_path(path: &str) -> bool {
 
 pub fn load_stdin(args: Vec<String>) -> io::Result<String> {
     if std::io::stdin().is_terminal() {
-        println!("There is no stdin input.");
+        print_fancy(&[
+            ("There is no stdin input.", RED, vec![BOLD]),
+        ]);
         usage(args);
         return Err(io::Error::new(io::ErrorKind::Other, "stdin not redirected"));
     }
@@ -60,9 +64,9 @@ pub fn usage(args: Vec<String>) {
         ("\"", MAGENTA, vec![]),
         (" GoogleQrImage.png\n", GREEN, vec![]),
         ("<text>", MAGENTA, vec![]),
-        (" is required. Put your url here in quotes.\n", CYAN, vec![]),
+        (" is required.\n", CYAN, vec![]),
         ("<fileName>", GREEN, vec![]),
-        (" is optional. Can be png or svg. Defaults to \"file_output.png\".\n", CYAN, vec![]),
+        (" is optional. Can be png or svg. Defaults to \"output.png\".\n", CYAN, vec![]),
         ("Image file is generated in current directory.", CYAN, vec![]),
     ]);
 }
