@@ -7,6 +7,5 @@ edition = "2021"
 
 [dependencies]
 crossterm = "0.27.0"
-image = "0.24.7"
 qrcode-generator = "4.1.9"
 qrcodegen = "1.8.0"

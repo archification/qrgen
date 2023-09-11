@@ -1,5 +1,6 @@
 use std::path::Path;
 use std::io::{self, Read};
+use std::io::IsTerminal;
 use crate::solarized::{
     print_colored, print_fancy,
     VIOLET, BLUE, CYAN, GREEN, YELLOW, ORANGE, RED, MAGENTA,
@@ -33,6 +34,17 @@ pub fn read_file_to_string(filename: &str) -> io::Result<String> {
 
 pub fn is_file_path(path: &str) -> bool {
     Path::new(path).is_file()
+}
+
+pub fn load_stdin(args: Vec<String>) -> io::Result<String> {
+    if std::io::stdin().is_terminal() {
+        println!("There is no stdin input.");
+        usage(args);
+        return Err(io::Error::new(io::ErrorKind::Other, "stdin not redirected"));
+    }
+    let mut buffer = String::new();
+    io::stdin().read_to_string(&mut buffer)?;
+    return Ok(buffer);
 }
 
 pub fn usage(args: Vec<String>) {
