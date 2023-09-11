@@ -4,13 +4,10 @@ mod common;
 use std::path::{Path, PathBuf};
 use std::io::{self, Read};
 use std::env;
-use solarized::{
-    print_fancy,
-    BLUE, CYAN, GREEN, RED,
-    BOLD,
-};
 use common::{
-    png, svg, read_file_to_string, is_file_path, usage
+    png, svg,
+    read_file_to_string, is_file_path,
+    usage, unsupported
 };
 
 const MAX_TEXT_SIZE: usize = 2048;
@@ -61,14 +58,7 @@ fn main() {
             let mut new_filename = PathBuf::from(filename);
             new_filename.set_extension("png");
             let new_filename_str = new_filename.to_str().unwrap_or("file_output.png");
-            print_fancy(&[
-                ("Unsupported", RED, vec![BOLD]),
-                (" file extension.\n", CYAN, vec![]),
-                ("Defaulting to ", CYAN, vec![]),
-                ("PNG", GREEN, vec![BOLD]),
-                (". Saving as ", CYAN, vec![]),
-                (new_filename_str, BLUE, vec![BOLD]),
-            ]);
+            unsupported(new_filename_str);
             png(&text, new_filename_str)
         },
     }

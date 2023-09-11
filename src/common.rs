@@ -54,3 +54,14 @@ pub fn usage(args: Vec<String>) {
         ("Image file is generated in current directory.", CYAN, vec![]),
     ]);
 }
+
+pub fn unsupported(new_filename_str: &str) {
+    print_fancy(&[
+        ("Unsupported", RED, vec![BOLD]),
+        (" file extension.\n", CYAN, vec![]),
+        ("Defaulting to ", CYAN, vec![]),
+        ("PNG", GREEN, vec![BOLD]),
+        (". Saving as ", CYAN, vec![]),
+        (new_filename_str, BLUE, vec![BOLD]),
+    ]);
+}
