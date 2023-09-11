@@ -1,14 +1,15 @@
 mod solarized;
 mod common;
+mod generation;
 
 use std::path::{Path, PathBuf};
 use std::process::exit;
 use std::env;
 use common::{
-    png, svg, chunked,
     read_file_to_string, is_file_path,
     load_stdin, usage, unsupported
 };
+use generation::{png, svg, chunked};
 
 const MAX_TEXT_SIZE: usize = 2048;
 
