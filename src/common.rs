@@ -85,3 +85,16 @@ pub fn unsupported(new_filename_str: &str) {
         (new_filename_str, BLUE, vec![BOLD]),
     ]);
 }
+
+pub fn feedback(text: &str, filename: &str) {
+    print_fancy(&[
+        ("text: ", YELLOW, vec![]),
+        (text.trim(), VIOLET, vec![]),
+        ("\nfilename: ", YELLOW, vec![]),
+        (filename.trim(), VIOLET, vec![]),
+    ]);
+    print_colored(
+        &["c", "r", "e", "a", "t", "i", "n", "g"],
+        &[VIOLET, BLUE, CYAN, GREEN, YELLOW, ORANGE, RED, MAGENTA]
+    );
+}

@@ -9,7 +9,7 @@ use common::{
     read_file_to_string, is_file_path,
     load_stdin, usage, unsupported
 };
-use generation::{png, svg, chunked};
+use generation::{png, svg, chunked, chaos, chunked_chaos};
 
 const MAX_TEXT_SIZE: usize = 2048;
 
@@ -56,7 +56,13 @@ fn main() {
         usage(args);
         exit(0);
     };
-    if text.len() > MAX_TEXT_SIZE {
+    if filename.trim() == "chaos" || filename.trim() == "chaos.png" {
+        if text.len() > MAX_TEXT_SIZE {
+            chunked_chaos(&text, &filename);
+        } else {
+            chaos(&text, &filename);
+        };
+    } else if text.len() > MAX_TEXT_SIZE {
         chunked(&text, &filename);
     } else {
         let extension = Path::new(&filename).extension()
