@@ -1,9 +1,9 @@
 #!/bin/bash
 
 target_file="random_file.txt"
-#target_size=1073741824  # 1G
+target_size=1073741824  # 1G
 #target_size=1048576  # 1M
-target_size=4096  # 4K
+#target_size=4096  # 4K
 current_size=0
 
 # Empty the file if it exists
