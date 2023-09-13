@@ -9,7 +9,7 @@ use common::{
     read_file_to_string, is_file_path,
     load_stdin, usage, unsupported
 };
-use generation::{png, svg, chunked, chaos, chunked_chaos};
+use generation::{png, svg, chunked, chaos, chunked_chaos, colors, chunked_colors};
 
 const MAX_TEXT_SIZE: usize = 2048;
 
@@ -61,6 +61,12 @@ fn main() {
             chunked_chaos(&text, &filename);
         } else {
             chaos(&text, &filename);
+        };
+    } else if filename.trim() == "colors" || filename.trim() == "colors.png" {
+        if text.len() > MAX_TEXT_SIZE {
+            chunked_colors(&text, &filename);
+        } else {
+            colors(&text, &filename);
         };
     } else if text.len() > MAX_TEXT_SIZE {
         chunked(&text, &filename);

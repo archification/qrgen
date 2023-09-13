@@ -73,6 +73,48 @@ pub fn chunked(text: &str, filename: &str) {
     }
 }
 
+pub fn colors(text: &str, filename: &str) {
+    feedback(&text, &filename);
+    let img_u8: ImageBuffer<Luma<u8>, Vec<u8>> = qrcode_generator::to_image_buffer(text, QrCodeEcc::Low, 1024)
+        .unwrap();
+    let mut colored_buffer: ImageBuffer<Rgb<u8>, Vec<u8>> = ImageBuffer::new(img_u8.width(), img_u8.height());
+    for (x, y, pixel) in img_u8.enumerate_pixels() {
+        let Luma([value]) = *pixel;
+        let new_color: Rgb<u8> = if value == 0 {
+            Rgb([(0), (200), (200)])
+        } else {
+            Rgb([(200), (0), (200)])
+        };
+        colored_buffer.put_pixel(x, y, new_color);
+    }
+    let mut new_filename = PathBuf::from(filename);
+    new_filename.set_extension("png");
+    let new_filename_str = new_filename.to_str().unwrap_or("output.png");
+    colored_buffer.save(new_filename_str).unwrap();
+}
+
+pub fn chunked_colors(text: &str, filename: &str) {
+    print_colored(
+        &["Size exceeds 2K > chunking."],
+        &[ORANGE],
+    );
+    let chunks = text.as_bytes().chunks(MAX_TEXT_SIZE);
+    let mut new_filename = PathBuf::from(filename);
+    new_filename.set_extension("png");
+    let new_filename_str = new_filename.to_str().unwrap_or("output.png");
+    unsupported(new_filename_str);
+    for (i, chunk) in chunks.enumerate() {
+        let chunk_str = String::from_utf8_lossy(chunk);
+        let filename_with_index = format!("{}_part_{}.png", new_filename_str, i);
+        colors(&chunk_str, &filename_with_index);
+        print_colored(
+            &["chunk written."],
+            &[ORANGE],
+        );
+    }
+    return;
+}
+
 pub fn chaos(text: &str, filename: &str) {
     feedback(&text, &filename);
     let img_u8: ImageBuffer<Luma<u8>, Vec<u8>> = qrcode_generator::to_image_buffer(text, QrCodeEcc::Low, 1024)
@@ -88,7 +130,10 @@ pub fn chaos(text: &str, filename: &str) {
         };
         colored_buffer.put_pixel(x, y, new_color);
     }
-    colored_buffer.save(filename).unwrap();
+    let mut new_filename = PathBuf::from(filename);
+    new_filename.set_extension("png");
+    let new_filename_str = new_filename.to_str().unwrap_or("output.png");
+    colored_buffer.save(new_filename_str).unwrap();
 }
 
 pub fn chunked_chaos(text: &str, filename: &str) {
