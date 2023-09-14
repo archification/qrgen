@@ -1,4 +1,15 @@
 use crossterm::style::{Attribute, SetAttribute, SetBackgroundColor, SetForegroundColor, ResetColor, Color};
+/*
+use std::io::stdout;
+use crossterm::{
+    ExecutableCommand,
+    cursor,
+    terminal::{
+        Clear,
+        ClearType
+    }
+};
+*/
 
 pub const BACK: Color = Color::Rgb { r:7, g:54, b:66 };
 pub const VIOLET: Color = Color::Rgb { r:108, g:113, b:196 };
@@ -35,3 +46,11 @@ pub fn print_fancy(message_fragments: &[(&str, Color, Vec<Attribute>)]) {
     }
     println!("{}{}{}", SetBackgroundColor(BACK), formatted_message, ResetColor);
 }
+
+/*
+pub fn clear() {
+    stdout()
+        .execute(Clear(ClearType::All)).unwrap()
+        .execute(cursor::MoveTo(0, 0)).unwrap();
+}
+*/

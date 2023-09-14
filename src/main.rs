@@ -9,7 +9,14 @@ use common::{
     read_file_to_string, is_file_path,
     load_stdin, usage, unsupported
 };
-use generation::{png, svg, chunked, chaos, chunked_chaos, colors, chunked_colors};
+use generation::{
+    png, svg, chunked,
+    /*
+    chaos, chunked_chaos,
+    colors, chunked_colors,
+    chunked_hypno
+    */
+};
 
 const MAX_TEXT_SIZE: usize = 2048;
 
@@ -56,6 +63,7 @@ fn main() {
         usage(args);
         exit(0);
     };
+    /*
     if filename.trim() == "chaos" || filename.trim() == "chaos.png" {
         if text.len() > MAX_TEXT_SIZE {
             chunked_chaos(&text, &filename);
@@ -68,7 +76,15 @@ fn main() {
         } else {
             colors(&text, &filename);
         };
+    } else if filename.trim() == "hypno" ||
+        filename.trim() == "hypnosis" ||
+        filename.trim() == "hypno.png" ||
+        filename.trim() == "hypnosis.png" {
+        chunked_hypno(&filename);
     } else if text.len() > MAX_TEXT_SIZE {
+        chunked(&text, &filename);
+    */
+    if text.len() > MAX_TEXT_SIZE {
         chunked(&text, &filename);
     } else {
         let extension = Path::new(&filename).extension()
