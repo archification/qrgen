@@ -1,5 +1,5 @@
 use std::path::{Path};
-use std::io::{self, Read};
+use std::io::{self, Read, Write};
 use std::io::IsTerminal;
 use crate::solarized::{
     print_colored, print_fancy,
@@ -21,21 +21,28 @@ pub fn is_file_path(path: &str) -> bool {
 
 pub fn load_stdin() -> io::Result<String> {
     if std::io::stdin().is_terminal() {
-        print_fancy(&[
-            ("There is no ", RED, vec![]),
-            ("stdin", RED, vec![BOLD, UNDERLINED]),
-            (" or ", RED, vec![]),
-            ("text", RED, vec![BOLD, UNDERLINED]),
-            (".\n", RED, vec![]),
-            ("Generating ", ORANGE, vec![]),
-            ("empty", ORANGE, vec![ITALIC]),
-            (" code.", ORANGE, vec![]),
-        ]);
-        print_colored(
-            &["Run with \"help\", \"--help\", or \"-h\" to see usage."],
-            &[CYAN]
-        );
-        return Err(io::Error::new(io::ErrorKind::Other, "stdin not redirected"));
+        print!("Enter text for generating QR code: ");
+        io::stdout().flush().unwrap();
+        let mut input = String::new();
+        io::stdin().read_line(&mut input)?;
+        if input.trim().is_empty() {
+            print_fancy(&[
+                ("There is no ", RED, vec![]),
+                ("stdin", RED, vec![BOLD, UNDERLINED]),
+                (" or ", RED, vec![]),
+                ("text", RED, vec![BOLD, UNDERLINED]),
+                (".\n", RED, vec![]),
+                ("Generating ", ORANGE, vec![]),
+                ("empty", ORANGE, vec![ITALIC]),
+                (" code.", ORANGE, vec![]),
+            ]);
+            print_colored(
+                &["Run with \"", "help", "\", \"", "--help", "\", or \"", "-h", "\" to see usage."],
+                &[CYAN, VIOLET, CYAN, VIOLET, CYAN, VIOLET, CYAN]
+            );
+            return Err(io::Error::new(io::ErrorKind::Other, "No input provided"));
+        }
+        return Ok(input);
     }
     let mut buffer = String::new();
     io::stdin().read_to_string(&mut buffer)?;

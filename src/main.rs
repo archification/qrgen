@@ -17,10 +17,12 @@ use generation::{
     chunked_hypno
     */
 };
+use solarized::clear;
 
 const MAX_TEXT_SIZE: usize = 2048;
 
 fn main() {
+    clear();
     let args: Vec<String> = env::args().collect();
     let (text, filename) = if args.len() == 1 {
         (load_stdin().unwrap_or_else(|_| {
