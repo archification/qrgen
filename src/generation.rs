@@ -28,15 +28,26 @@ pub fn chunked(text: &str, filename: &str) {
         &["Size exceeds 2K > chunking."],
         &[ORANGE],
     );
+    let mut base_filename = String::from(filename);
+    if filename == "output.png" {
+        let mut counter = 1;
+        loop {
+            base_filename = format!("output_{}.png", counter);
+            if !Path::new(&format!("{}_part_0.png", base_filename)).exists() {
+                break;
+            }
+            counter += 1;
+        }
+    }
     let chunks = text.as_bytes().chunks(MAX_TEXT_SIZE);
-    let extension = Path::new(&filename).extension()
+    let extension = Path::new(&base_filename).extension()
         .and_then(|s| s.to_str())
         .unwrap_or("");
     match extension {
         "png" => {
             for (i, chunk) in chunks.enumerate() {
                 let chunk_str = String::from_utf8_lossy(chunk);
-                let filename_with_index = format!("{}_part_{}.png", filename, i);
+                let filename_with_index = format!("{}_part_{}.png", base_filename, i);
                 png(&chunk_str, &filename_with_index);
                 print_colored(
                     &["chunk written."],
@@ -48,7 +59,7 @@ pub fn chunked(text: &str, filename: &str) {
         "svg" => {
             for (i, chunk) in chunks.enumerate() {
                 let chunk_str = String::from_utf8_lossy(chunk);
-                let filename_with_index = format!("{}_part_{}.svg", filename, i);
+                let filename_with_index = format!("{}_part_{}.svg", base_filename, i);
                 svg(&chunk_str, &filename_with_index);
                 print_colored(
                     &["chunk written."],
@@ -58,7 +69,7 @@ pub fn chunked(text: &str, filename: &str) {
             return;
         }
         _ => {
-            let mut new_filename = PathBuf::from(filename);
+            let mut new_filename = PathBuf::from(base_filename);
             new_filename.set_extension("png");
             let new_filename_str = new_filename.to_str().unwrap_or("output.png");
             unsupported(new_filename_str);

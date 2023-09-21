@@ -65,6 +65,14 @@ fn main() {
         usage(args);
         exit(0);
     };
+    let mut final_filename = filename.clone();
+    if final_filename == "output.png" {
+        let mut counter = 1;
+        while Path::new(&final_filename).exists() {
+            final_filename = format!("output_{}.png", counter);
+            counter += 1;
+        }
+    }
     /*
     if filename.trim() == "chaos" || filename.trim() == "chaos.png" {
         if text.len() > MAX_TEXT_SIZE {
@@ -87,16 +95,16 @@ fn main() {
         chunked(&text, &filename);
     */
     if text.len() > MAX_TEXT_SIZE {
-        chunked(&text, &filename);
+        chunked(&text, &final_filename);
     } else {
-        let extension = Path::new(&filename).extension()
+        let extension = Path::new(&final_filename).extension()
             .and_then(|s| s.to_str())
             .unwrap_or("");
         match extension {
-            "png" => png(&text, &filename),
-            "svg" => svg(&text, &filename),
+            "png" => png(&text, &final_filename),
+            "svg" => svg(&text, &final_filename),
             _ => {
-                let mut new_filename = PathBuf::from(filename);
+                let mut new_filename = PathBuf::from(final_filename);
                 new_filename.set_extension("png");
                 let new_filename_str = new_filename.to_str().unwrap_or("output.png");
                 unsupported(new_filename_str);
