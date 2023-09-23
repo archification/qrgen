@@ -59,9 +59,9 @@ pub fn usage(args: Vec<String>) {
         //example with both arguments
         ("Example: ", CYAN, vec![BOLD]),
         (&format!("{} ", args[0]), BLUE, vec![]),
-        ("\"", MAGENTA, vec![]),
+        ("\"", CYAN, vec![]),
         ("https://google.com/", MAGENTA, vec![UNDERLINED]),
-        ("\"", MAGENTA, vec![]),
+        ("\"", CYAN, vec![]),
         (" GoogleQrImage.png\n", GREEN, vec![]),
 
         //example with stdin
@@ -70,15 +70,29 @@ pub fn usage(args: Vec<String>) {
         (&format!("{} ", args[0]), BLUE, vec![]),
         (" GoogleQrImage.png\n", GREEN, vec![]),
 
+        //example decode
+        ("Example: ", CYAN, vec![BOLD]),
+        (&format!("{} ", args[0]), BLUE, vec![]),
+        ("decode\n\n", MAGENTA, vec![]),
+
         ("<text>", MAGENTA, vec![]),
         (" can be supplied by an argument or stdin.\n", CYAN, vec![]),
         ("This argument can be text or a file in the current directory.\n", CYAN, vec![]),
-        ("<fileName>", GREEN, vec![]),
+        ("\n<fileName>", GREEN, vec![]),
         (" is optional. Can be png or svg. Defaults to ", CYAN, vec![]),
         ("\"output.png\"", VIOLET, vec![]),
         (".\n", CYAN, vec![]),
         ("Image file is generated in current directory.\n", CYAN, vec![]),
-        ("Have fun and enjoy the squares!.", YELLOW, vec![]),
+
+        //decode
+        ("\nIf the ", CYAN, vec![]),
+        ("<text>", MAGENTA, vec![]),
+        (" field is ", CYAN, vec![]),
+        ("\"decode\"", VIOLET, vec![]),
+        (", an existing png file is expected in ", CYAN, vec![]),
+        ("<filename>", GREEN, vec![]),
+        ("\nThe qrcode in this file will decoded output will be printed cleanly.", CYAN, vec![]),
+        ("\nHave fun and enjoy the squares!", YELLOW, vec![]),
     ]);
 }
 

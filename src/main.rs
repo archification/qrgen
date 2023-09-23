@@ -1,6 +1,7 @@
 mod solarized;
 mod common;
 mod generation;
+mod decode;
 
 use std::path::{Path, PathBuf};
 use std::process::exit;
@@ -17,6 +18,7 @@ use generation::{
     chunked_hypno
     */
 };
+use decode::decode;
 use solarized::clear;
 
 const MAX_TEXT_SIZE: usize = 2048;
@@ -87,14 +89,15 @@ fn main() {
             colors(&text, &filename);
         };
     } else if filename.trim() == "hypno" ||
-        filename.trim() == "hypnosis" ||
-        filename.trim() == "hypno.png" ||
+        filename.trim() == "hypnosis" || filename.trim() == "hypno.png" ||
         filename.trim() == "hypnosis.png" {
         chunked_hypno(&filename);
     } else if text.len() > MAX_TEXT_SIZE {
         chunked(&text, &filename);
     */
-    if text.len() > MAX_TEXT_SIZE {
+    if text == "decode" {
+        decode(&filename);
+    } else if text.len() > MAX_TEXT_SIZE {
         chunked(&text, &final_filename);
     } else {
         let extension = Path::new(&final_filename).extension()
