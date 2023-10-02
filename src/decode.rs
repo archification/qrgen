@@ -1,3 +1,4 @@
+use std::fs;
 use std::path::Path;
 use image::ImageError;
 use crate::solarized::{
@@ -24,6 +25,41 @@ pub fn decode_qrcode_from_png(png_path: &str) -> Result<Option<String>, ImageErr
 
 pub fn decode(png_path: &str) {
     match decode_qrcode_from_png(png_path) {
+        Ok(Some(content)) => {
+            print_fancy(&[
+                ("Decoded content: ", CYAN, vec![]),
+                (&format!("{}", content), VIOLET, vec![]),
+            ]);
+            let txt_path = Path::new(png_path).with_extension("txt");
+            if let Err(err) = fs::write(&txt_path, &content) {
+                print_fancy(&[
+                    ("Failed to write to ", CYAN, vec![]),
+                    (&format!("{}", txt_path.display()), VIOLET, vec![]),
+                    (&format!(" due to error: {}", err), CYAN, vec![]),
+                ]);
+            } else {
+                print_fancy(&[
+                    ("Successfully written to ", CYAN, vec![]),
+                    (&format!("{}", txt_path.display()), VIOLET, vec![]),
+                ]);
+            }
+        }
+        Ok(None) => print_fancy(&[
+            ("Image at ", CYAN, vec![]),
+            (&format!("{}", png_path), VIOLET, vec![]),
+            (" does not contain a valid QR code.", CYAN, vec![]),
+        ]),
+        Err(_) => print_fancy(&[
+            ("The file ", CYAN, vec![]),
+            (&format!("{}", png_path), VIOLET, vec![]),
+            (" does not contain a valid PNG image.", CYAN, vec![]),
+        ])
+    }
+}
+
+/*
+pub fn decode(png_path: &str) {
+    match decode_qrcode_from_png(png_path) {
         Ok(Some(content)) => print_fancy(&[
                 ("Decoded content: ", CYAN, vec![]),
                 (&format!("{}", content), VIOLET, vec![]),
@@ -40,3 +76,4 @@ pub fn decode(png_path: &str) {
         ])
     }
 }
+*/
