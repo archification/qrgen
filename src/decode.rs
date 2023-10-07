@@ -2,10 +2,9 @@ use std::fs;
 use std::path::Path;
 use image::ImageError;
 use solarized::{
-    /*print_colored, */print_fancy,
-    VIOLET, /*BLUE, */CYAN,/*, GREEN, YELLOW, ORANGE, RED, MAGENTA,
-    BOLD, UNDERLINED, ITALIC*/
-    PrintMode::{NewLine},
+    print_fancy,
+    VIOLET, CYAN,
+    PrintMode::NewLine
 };
 
 pub fn decode_qrcode_from_png(png_path: &str) -> Result<Option<String>, ImageError> {

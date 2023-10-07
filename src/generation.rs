@@ -1,10 +1,9 @@
 use std::path::{Path, PathBuf};
 use std::fs::{self, File};
 use solarized::{
-    print_colored,
+    print_colored, clear,
     ORANGE,
-    PrintMode::{NewLine},
-    clear
+    PrintMode::NewLine
 };
 use crate::common::{unsupported, feedback};
 use qrcode_generator::QrCodeEcc;

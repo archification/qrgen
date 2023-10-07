@@ -29,17 +29,12 @@ fn main() {
         }).to_string(), "output.png".to_string())
     } else if args.len() == 2 {
         match &args[1][..] {
-            "help" => {
+            "help" | "--help" | "-h" => {
                 usage(args.clone());
                 exit(0);
             },
-            "--help" => {
-                usage(args.clone());
-                exit(0);
-            },
-            "-h" => {
-                usage(args.clone());
-                exit(0);
+            "hypno" | "hypnosis" => {
+                (String::new(), args[1].clone())
             },
             _ => {
                 (load_stdin().unwrap_or_else(|_| {
@@ -72,26 +67,6 @@ fn main() {
             counter += 1;
         }
     }
-    /*
-    if filename.trim() == "chaos" || filename.trim() == "chaos.png" {
-        if text.len() > MAX_TEXT_SIZE {
-            chunked_chaos(&text, &filename);
-        } else {
-            chaos(&text, &filename);
-        };
-    } else if filename.trim() == "colors" || filename.trim() == "colors.png" {
-        if text.len() > MAX_TEXT_SIZE {
-            chunked_colors(&text, &filename);
-        } else {
-            colors(&text, &filename);
-        };
-    } else if filename.trim() == "hypno" ||
-        filename.trim() == "hypnosis" || filename.trim() == "hypno.png" ||
-        filename.trim() == "hypnosis.png" {
-        chunked_hypno(&filename);
-    } else if text.len() > MAX_TEXT_SIZE {
-        chunked(&text, &filename);
-    */
     if text == "decode" {
         decode(&filename);
     } else if filename.trim() == "chaos" || filename.trim() == "chaos.png" {
@@ -106,12 +81,8 @@ fn main() {
         } else {
             colors(&text, &filename);
         };
-    } else if filename.trim() == "hypno" ||
-        filename.trim() == "hypnosis" ||
-        filename.trim() == "hypnosis.png" || filename.trim() == "hypno.png" {
-        if text.len() > MAX_TEXT_SIZE {
-            chunked_hypno(&filename);
-        };
+    } else if filename.trim() == "hypno" || filename.trim() == "hypnosis" {
+        chunked_hypno(&filename);
     } else if text.len() > MAX_TEXT_SIZE {
         chunked(&text, &final_filename);
     } else {

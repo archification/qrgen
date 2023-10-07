@@ -6,7 +6,7 @@ use solarized::{
     print_colored, print_fancy,
     VIOLET, BLUE, CYAN, GREEN, YELLOW, ORANGE, RED, MAGENTA,
     BOLD, UNDERLINED, ITALIC,
-    PrintMode::{NewLine},
+    PrintMode::NewLine
 };
 
 pub fn read_file_to_string(filename: &str) -> io::Result<String> {
