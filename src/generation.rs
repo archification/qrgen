@@ -1,8 +1,9 @@
 use std::path::{Path, PathBuf};
 //use std::fs::{self, File};
-use crate::solarized::{
+use solarized::{
     print_colored,
     ORANGE,
+    PrintMode::{NewLine},
 //    clear
 };
 use crate::common::{unsupported, feedback};
@@ -27,6 +28,7 @@ pub fn chunked(text: &str, filename: &str) {
     print_colored(
         &["Size exceeds 2K > chunking."],
         &[ORANGE],
+        NewLine
     );
     let mut base_filename = String::from(filename);
     if filename == "output.png" {
@@ -52,6 +54,7 @@ pub fn chunked(text: &str, filename: &str) {
                 print_colored(
                     &["chunk written."],
                     &[ORANGE],
+                    NewLine
                 );
             }
             return;
@@ -64,6 +67,7 @@ pub fn chunked(text: &str, filename: &str) {
                 print_colored(
                     &["chunk written."],
                     &[ORANGE],
+                    NewLine
                 );
             }
             return;
@@ -80,6 +84,7 @@ pub fn chunked(text: &str, filename: &str) {
                 print_colored(
                     &["chunk written."],
                     &[ORANGE],
+                    NewLine
                 );
             }
             return;

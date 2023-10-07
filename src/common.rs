@@ -2,10 +2,11 @@ use std::path::{Path};
 use std::io::{self, Read, Write};
 use std::io::IsTerminal;
 use std::env;
-use crate::solarized::{
+use solarized::{
     print_colored, print_fancy,
     VIOLET, BLUE, CYAN, GREEN, YELLOW, ORANGE, RED, MAGENTA,
-    BOLD, UNDERLINED, ITALIC
+    BOLD, UNDERLINED, ITALIC,
+    PrintMode::{NewLine},
 };
 
 pub fn read_file_to_string(filename: &str) -> io::Result<String> {
@@ -41,10 +42,11 @@ pub fn load_stdin() -> io::Result<String> {
                         ("Generating ", ORANGE, vec![]),
                         ("empty", ORANGE, vec![ITALIC]),
                         (" code.", ORANGE, vec![]),
-                    ]);
+                    ], NewLine);
                     print_colored(
                         &["Run with \"", "help", "\", \"", "--help", "\", or \"", "-h", "\" to see usage."],
-                        &[CYAN, VIOLET, CYAN, VIOLET, CYAN, VIOLET, CYAN]
+                        &[CYAN, VIOLET, CYAN, VIOLET, CYAN, VIOLET, CYAN],
+                        NewLine
                     );
                     return Err(io::Error::new(io::ErrorKind::Other, "No input provided"));
                 }
@@ -101,7 +103,7 @@ pub fn usage(args: Vec<String>) {
         ("<filename>", GREEN, vec![]),
         ("\nThe qrcode in this file will decoded output will be printed cleanly.", CYAN, vec![]),
         ("\nHave fun and enjoy the squares!", YELLOW, vec![]),
-    ]);
+    ], NewLine);
 }
 
 pub fn unsupported(new_filename_str: &str) {
@@ -112,7 +114,7 @@ pub fn unsupported(new_filename_str: &str) {
         ("PNG", GREEN, vec![BOLD]),
         (". Saving as ", CYAN, vec![]),
         (new_filename_str, BLUE, vec![BOLD]),
-    ]);
+    ], NewLine);
 }
 
 pub fn feedback(text: &str, filename: &str) {
@@ -121,9 +123,10 @@ pub fn feedback(text: &str, filename: &str) {
         (text.trim(), VIOLET, vec![]),
         ("\nfilename: ", YELLOW, vec![]),
         (filename.trim(), VIOLET, vec![]),
-    ]);
+    ], NewLine);
     print_colored(
         &["c", "r", "e", "a", "t", "i", "n", "g"],
-        &[VIOLET, BLUE, CYAN, GREEN, YELLOW, ORANGE, RED, MAGENTA]
+        &[VIOLET, BLUE, CYAN, GREEN, YELLOW, ORANGE, RED, MAGENTA],
+        NewLine
     );
 }

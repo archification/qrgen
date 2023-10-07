@@ -12,6 +12,7 @@ image = "0.24.7"
 qrcode-generator = "4.1.9"
 rand = "0.8.5"
 rqrr = "0.6.0"
+solarized = { git = "https://github.com/archification/solarized.git", branch = "main" }
 
 [profile.release]
 strip = true

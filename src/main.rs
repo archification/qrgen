@@ -1,4 +1,3 @@
-mod solarized;
 mod common;
 mod generation;
 mod decode;
