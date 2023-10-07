@@ -1,16 +1,16 @@
 use std::path::{Path, PathBuf};
-//use std::fs::{self, File};
+use std::fs::{self, File};
 use solarized::{
     print_colored,
     ORANGE,
     PrintMode::{NewLine},
-//    clear
+    clear
 };
 use crate::common::{unsupported, feedback};
 use qrcode_generator::QrCodeEcc;
-//use image::{ImageBuffer, Luma, Rgb};
-//use gif;
-//use rand::Rng;
+use image::{ImageBuffer, Luma, Rgb};
+use gif;
+use rand::Rng;
 
 const MAX_TEXT_SIZE: usize = 2048;
 
@@ -92,7 +92,6 @@ pub fn chunked(text: &str, filename: &str) {
     }
 }
 
-/*
 pub fn colors(text: &str, filename: &str) {
     feedback(&text, &filename);
     let img_u8: ImageBuffer<Luma<u8>, Vec<u8>> = qrcode_generator::to_image_buffer(text, QrCodeEcc::Low, 1024)
@@ -117,6 +116,7 @@ pub fn chunked_colors(text: &str, filename: &str) {
     print_colored(
         &["Size exceeds 2K > chunking."],
         &[ORANGE],
+        NewLine
     );
     let chunks = text.as_bytes().chunks(MAX_TEXT_SIZE);
     let mut new_filename = PathBuf::from(filename);
@@ -130,6 +130,7 @@ pub fn chunked_colors(text: &str, filename: &str) {
         print_colored(
             &["chunk written."],
             &[ORANGE],
+            NewLine
         );
     }
     return;
@@ -160,6 +161,7 @@ pub fn chunked_chaos(text: &str, filename: &str) {
     print_colored(
         &["Size exceeds 2K > chunking."],
         &[ORANGE],
+        NewLine
     );
     let chunks = text.as_bytes().chunks(MAX_TEXT_SIZE);
     let mut new_filename = PathBuf::from(filename);
@@ -173,12 +175,13 @@ pub fn chunked_chaos(text: &str, filename: &str) {
         print_colored(
             &["chunk written."],
             &[ORANGE],
+            NewLine
         );
     }
     return;
 }
 
-pub fn hypno(text: &str, filename: &str, red: u8, green: u8, blue: u8) {
+fn hypno(text: &str, filename: &str, red: u8, green: u8, blue: u8) {
     feedback(&text, &filename);
     let img_u8: ImageBuffer<Luma<u8>, Vec<u8>> = qrcode_generator::to_image_buffer(text, QrCodeEcc::Low, 1024)
         .unwrap();
@@ -225,6 +228,7 @@ pub fn chunked_hypno(filename: &str) {
         print_colored(
             &["chunk written."],
             &[ORANGE],
+            NewLine
         );
     }
     let mut png_paths: Vec<String> = Vec::new();
@@ -258,4 +262,3 @@ pub fn chunked_hypno(filename: &str) {
     }
     return;
 }
-*/

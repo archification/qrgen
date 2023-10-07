@@ -11,11 +11,9 @@ use common::{
 };
 use generation::{
     png, svg, chunked,
-    /*
     chaos, chunked_chaos,
     colors, chunked_colors,
     chunked_hypno
-    */
 };
 use decode::decode;
 use solarized::clear;
@@ -96,6 +94,24 @@ fn main() {
     */
     if text == "decode" {
         decode(&filename);
+    } else if filename.trim() == "chaos" || filename.trim() == "chaos.png" {
+        if text.len() > MAX_TEXT_SIZE {
+            chunked_chaos(&text, &filename);
+        } else {
+            chaos(&text, &filename);
+        };
+    } else if filename.trim() == "colors" || filename.trim() == "colors.png" {
+        if text.len() > MAX_TEXT_SIZE {
+            chunked_colors(&text, &filename);
+        } else {
+            colors(&text, &filename);
+        };
+    } else if filename.trim() == "hypno" ||
+        filename.trim() == "hypnosis" ||
+        filename.trim() == "hypnosis.png" || filename.trim() == "hypno.png" {
+        if text.len() > MAX_TEXT_SIZE {
+            chunked_hypno(&filename);
+        };
     } else if text.len() > MAX_TEXT_SIZE {
         chunked(&text, &final_filename);
     } else {
